@@ -9,7 +9,6 @@ import pass_screen
 # 音频
 sound = sound.sound()
 
-
 # 设置窗口的大小
 WINDOW_WIDTH = 1200
 WINDOW_HEIGHT = 800
@@ -105,7 +104,7 @@ isKey3 = False
 # 旋转的图片和固定图片
 rotating_image = pygame.image.load('./img/bear-romate.png').convert_alpha()
 fixed_image = pygame.image.load('./img/bear.png').convert_alpha()
-rotating_image = pygame.transform.scale(rotating_image, (80, 80))
+rotating_image = pygame.transform.scale(rotating_image, (70, 70))
 fixed_image = pygame.transform.scale(fixed_image, (200, 200))
 rotating_angle = 0  # 初始旋转角度
 
@@ -121,6 +120,7 @@ pygame.time.set_timer(TIMER_EVENT, 150)  # 200毫秒
 def create_obstacle(num):
     notes = keyQueue[num]
     rect = pygame.Rect(WINDOW_WIDTH, WINDOW_HEIGHT / 2 - TRACK_HEIGHT / 2, OBSTACLE_WIDTH, OBSTACLE_HEIGHT)
+    # level = random.randint(1, 3)
     level = 0
     for note in notes:
         lev = note[0] + 12 * note[1]
@@ -129,7 +129,7 @@ def create_obstacle(num):
         if lev > level:
             level = lev
 
-    print(level)
+    # print(level)
     if level == 1:
         return {'rect': rect, 'image': obstacle_image1, 'level': level,'notes':notes}
     elif level == 2:
@@ -179,7 +179,7 @@ def main():
                                     imgDie = obstacle_hit_image2
                                 elif obstacle['level'] == 3:
                                     imgDie = obstacle_hit_image3
-                                knocked_back_obstacles.append( [rect, OBSTACLE_KNOCKBACK_SPEED_X, OBSTACLE_KNOCKBACK_SPEED_Y, imgDie])
+                                knocked_back_obstacles.append( [rect, OBSTACLE_KNOCKBACK_SPEED_X*random.randint(2,6), OBSTACLE_KNOCKBACK_SPEED_Y*random.randint(2,6), imgDie])
                                 obstacles.remove(obstacle)
                                 for note in obstacle['notes']:
                                     sound.playSoundScapebyName(note[0], note[1])
@@ -258,7 +258,7 @@ def main():
             image = obstacle_data[3]
             screen.blit(image, rect)
 
-        fixed_image_x = WINDOW_WIDTH // 5
+        fixed_image_x = WINDOW_WIDTH // 6
         fixed_image_y = WINDOW_HEIGHT // 1.5 - fixed_image.get_height() // 2
         screen.blit(fixed_image, (fixed_image_x, fixed_image_y))
 
@@ -275,7 +275,7 @@ def main():
         pygame.display.flip()
 
         # 控制游戏刷新速度
-        pygame.time.Clock().tick(60)
+        pygame.time.Clock().tick(120)
 
         if len(obstacles) == 0 and numOfNote >= len(keyQueue):
             print("Game Over")
